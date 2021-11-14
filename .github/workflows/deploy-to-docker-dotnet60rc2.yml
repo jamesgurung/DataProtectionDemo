@@ -1,0 +1,22 @@
+name: Build on .NET 6.0 RC2
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Sign in to Docker Hub
+      env:
+        DOCKER_USER: ${{secrets.DOCKER_USER}}
+        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+      run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USER}}/dpdemo60rc2:latest --build-arg DOTNET_VERSION=6.0.0-rc.2 --build-arg SDK_VERSION=6.0.100-rc.2
+    - name: Docker Push
+      run: docker push ${{secrets.DOCKER_USER}}/dpdemo60rc2:latest
