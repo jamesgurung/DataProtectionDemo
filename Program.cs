@@ -10,17 +10,19 @@ var app = builder.Build();
 
 app.UseDeveloperExceptionPage();
 
-app.MapGet("/", (IDataProtectionProvider dataProtectionProvider) =>
+app.MapGet("/", (IDataProtectionProvider dataProtectionProvider, IWebHostEnvironment env) =>
 {
   var protector = dataProtectionProvider.CreateProtector("test");
-  return $"Running {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}\n\n" +
+  return $"Running {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}\n" +
+    $"ContentRoot: {env.ContentRootPath}\n\n" +
     $"Encrypted message: {protector.Protect("This is a test.")}";
 });
 
-app.MapGet("/{encryptedText}", (string encryptedText, IDataProtectionProvider dataProtectionProvider) =>
+app.MapGet("/{encryptedText}", (string encryptedText, IDataProtectionProvider dataProtectionProvider, IWebHostEnvironment env) =>
 {
   var protector = dataProtectionProvider.CreateProtector("test");
-  return $"Running {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}\n\n" +
+  return $"Running {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}\n" +
+    $"ContentRoot: {env.ContentRootPath}\n\n" +
     $"Decrypted message: {protector.Unprotect(encryptedText)}";
 });
 
