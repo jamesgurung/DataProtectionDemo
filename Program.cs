@@ -6,8 +6,7 @@ var config = builder.Configuration;
 builder.Environment.ContentRootPath = builder.Environment.ContentRootPath.TrimEnd('/');
 
 builder.Services.AddDataProtection()
-  .PersistKeysToAzureBlobStorage(new Uri(config["DataProtectionBlobUri"]))
-  .SetApplicationName("shared app name");
+  .PersistKeysToAzureBlobStorage(new Uri(config["DataProtectionBlobUri"]));
 
 var app = builder.Build();
 
