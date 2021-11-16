@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.DataProtection;
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
+builder.Environment.ContentRootPath = builder.Environment.ContentRootPath.TrimEnd('/');
+
 builder.Services.AddDataProtection()
   .PersistKeysToAzureBlobStorage(new Uri(config["DataProtectionBlobUri"]));
 
